@@ -19,7 +19,7 @@ namespace Leetcode.DataStructures
                     return wordNode[c];
                 }
 
-                public WordNode Get(char c)
+                public WordNode GetChildNode(char c)
                 {
                     if (!wordNode.ContainsKey(c))
                         return null;
@@ -30,7 +30,7 @@ namespace Leetcode.DataStructures
                 {
                     foreach (var key in wordNode.Keys)
                     {
-                        yield return Get(key);
+                        yield return GetChildNode(key);
                     }
                 }
             }
@@ -59,22 +59,21 @@ namespace Leetcode.DataStructures
                 return Search(root, 0);
                 bool Search(WordNode current, int startIdx)
                 {
-                    var currentWordNode = current;
-                    for(int i  = startIdx; i != word.Length; ++i)
+                    if (current == null)
+                        return false;
+                    if (startIdx == word.Length)
+                        return current.IsWord;
+
+                    var currentChar = word[startIdx];
+
+                    if (currentChar == '.')
                     {
-                        var currentChar = word[i];
-                        if (currentChar == '.')
-                        {
-                            return currentWordNode.GetAllChildNodes().Any(x => Search(x, i + 1));
-                        }
-                        else
-                        {
-                            currentWordNode = currentWordNode.Get(currentChar);
-                            if (currentWordNode == null)
-                                return false;
-                        }
+                        return current.GetAllChildNodes().Any(x => Search(x, startIdx + 1));
                     }
-                    return currentWordNode.IsWord;
+                    else
+                    {
+                        return Search(current.GetChildNode(currentChar), startIdx + 1);
+                    }
                 }
             }
         }
