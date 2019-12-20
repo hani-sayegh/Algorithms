@@ -10,25 +10,27 @@ namespace Leetcode.dp
         {
             var n = word1.Length;
             var m = word2.Length;
-            var dp = new int[n + 1, m + 1];
-
-            for (int col = 0; col != m; ++col)
-                dp[0, col] = col;
-            for (int row = 0; row != n; ++row)
-                dp[row, 0] = row;
-
+            var dp = new int[m + 1];
+            for (int col = 0; col <= m; ++col)
+                dp[col] = col;
             for (int row = 1; row <= n; ++row)
-            for (int col = 1; col <= m; ++col)
+            {
+                int leftVal = row;
+                for (int col = 1; col <= m; ++col)
                 {
-                    var prow = row - 1;
                     var pcol = col - 1;
-                    if (word1[prow] == word2[pcol])
-                        dp[row, col] = dp[prow, pcol];
+                    var tmp = leftVal;
 
+                    if (word1[row - 1] == word2[pcol])
+                        leftVal = dp[pcol];
                     else
-                        dp[row, col] = Math.Min(dp[prow, col], dp[row, pcol]) + 1;
+                        leftVal = Math.Min(leftVal, dp[col]) + 1;
+
+                    dp[pcol] = tmp;
                 }
-            return dp[n , m ];
+                dp[m] = leftVal;
+            }
+            return dp[m];
         }
     }
 }
