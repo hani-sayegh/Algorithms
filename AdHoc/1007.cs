@@ -8,37 +8,29 @@ namespace Leetcode.AdHoc
     {
         public int MinDominoRotations(int[] A, int[] B)
         {
-            var set = new HashSet<int>();
 
-            set.Add(A[0]);
-            set.Add(B[0]);
+            var res = Min(A[0]);
 
-            for (int i = 1; i != A.Length; ++i)
+            if (res != -1 || A[0] == B[0]) return res;
+
+            return Min(B[0]);
+
+            int Min(int target)
             {
-                set.IntersectWith(new HashSet<int> { A[i], B[i] });
-                if (set.Count == 0)
-                    return -1;
-            }
-
-            var result = int.MaxValue;
-            foreach (var common in set)
-            {
-                var toSwap = 0;
-                var toSwap2 = 0;
-                foreach (var val in A)
+                var ar = 0;
+                var br = 0;
+                for (int i = 0; i != A.Length; ++i)
                 {
-                    if (val != common)
-                        ++toSwap;
-                }
-                foreach (var val in B)
-                {
-                    if (val != common)
-                        ++toSwap2;
-                }
+                    if (A[i] != target && B[i] != target)
+                        return -1;
 
-                result = Math.Min(result, Math.Min(toSwap, toSwap2));
+                    if (A[i] != target)
+                        ++ar;
+                    if (B[i] != target)
+                        ++br;
+                }
+                return Math.Min(ar, br);
             }
-            return result;
         }
     }
 }
