@@ -20,19 +20,16 @@ namespace Leetcode.Graph
             public TreeNode InorderSuccessor(TreeNode root, TreeNode p)
             {
                 TreeNode result = null;
-                while (root != null)
+
+                if (root == null)
+                    return result;
+
+                if (root.val > p.val)
                 {
-                    if (root.val > p.val)
-                    {
-                        result = root;
-                        root = root.left;
-                    }
-                    else if (root.val <= p.val)
-                    {
-                        root = root.right;
-                    }
+                    var left = InorderSuccessor(root.left, p);
+                    return (left != null) ? left : root;
                 }
-                return result;
+                return InorderSuccessor(root.right, p);
             }
         }
     }
