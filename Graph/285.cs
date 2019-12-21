@@ -17,45 +17,22 @@ namespace Leetcode.Graph
          */
         public class Solution
         {
-
-            int target;
-            TreeNode result = null;
-            bool targetFound = false;
             public TreeNode InorderSuccessor(TreeNode root, TreeNode p)
             {
-                target = p.val;
-                InorderTraverse(root);
+                TreeNode result = null;
+                while (root != null)
+                {
+                    if (root.val > p.val)
+                    {
+                        result = root;
+                        root = root.left;
+                    }
+                    else if (root.val <= p.val)
+                    {
+                        root = root.right;
+                    }
+                }
                 return result;
-            }
-
-            public void UpdateResult(TreeNode t)
-            {
-                if (t.val < target)
-                    return;
-                if (result == null)
-                {
-                    result = t;
-                    return;
-                }
-                if (result.val > t.val)
-                    result = t;
-            }
-
-            public void InorderTraverse(TreeNode root)
-            {
-                if (root == null)
-                    return;
-
-                InorderTraverse(root.left);
-                if (targetFound)
-                {
-                    UpdateResult(root);
-                }
-                if (root.val == target)
-                    targetFound = true;
-
-
-                InorderTraverse(root.right);
             }
         }
     }
